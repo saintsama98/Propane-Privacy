@@ -1,0 +1,17 @@
+# --- Foundry ---
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/.forge-snapshots/
+
+# --- Soldeer ---
+# Vendored dependency sources. foundry.toml [dependencies] and soldeer.lock are
+# the committed source of truth; restore with `forge soldeer install`.
+contracts/dependencies/
+
+# --- Local ---
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
