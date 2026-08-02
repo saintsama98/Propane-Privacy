@@ -1,0 +1,24 @@
+# --- Foundry ---
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/.forge-snapshots/
+
+# --- Soldeer ---
+# Vendored dependency sources. foundry.toml [dependencies] and soldeer.lock are
+# the committed source of truth; restore with `forge soldeer install`.
+contracts/dependencies/
+
+# --- Research: deliberately NOT published ---
+# This repository is public. The litepaper and technical notes are held back
+# pending a disclosure decision; they live only on local disk and are not
+# backed up by this remote. Remove this entry to publish them.
+silo/
+index.md
+
+# --- Local ---
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log

@@ -1,0 +1,18 @@
+[[dependencies]]
+name = "@openzeppelin-contracts"
+version = "5.7.0"
+git = "https://github.com/OpenZeppelin/openzeppelin-contracts.git"
+rev = "cab19933c33c2ad1d4c7a84864a3601dddfd16f3"
+
+[[dependencies]]
+name = "@openzeppelin-contracts-upgradeable"
+version = "5.7.0"
+git = "https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable.git"
+rev = "14f52c54d3a1eefbda3d4071efba24d3c1e07e8a"
+
+[[dependencies]]
+name = "forge-std"
+version = "1.16.2"
+url = "https://soldeer-revisions.s3.amazonaws.com/forge-std/1_16_2_03-07-2026_07:37:45_forge-std-1.16.zip"
+checksum = "405dccc9d60d753f6abc412b4adf0359f4390f65dbadbbb277a12b4946ed8969"
+integrity = "5fb4325b60d7d4194bd0481e2f94398cf1d9c6561dd12a66fb2748ef4a68205f"
