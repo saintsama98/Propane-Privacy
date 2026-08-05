@@ -12,7 +12,6 @@ contract PropaneStorageProbe is Initializable, UUPSUpgradeable {
         uint256 value;
     }
 
-    // erc7201("propane.storage.Probe")
     bytes32 private constant PROBE_STORAGE =
         keccak256(abi.encode(uint256(keccak256("propane.storage.Probe")) - 1)) & ~bytes32(uint256(0xff));
 
