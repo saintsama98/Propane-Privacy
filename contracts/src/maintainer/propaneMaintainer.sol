@@ -77,27 +77,62 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, IPropaneM
         return true;
     }
 
+    /// @dev Direct role-to-role transitions are permitted deliberately. The prior
+    ///      art requires NO_ROLE as an intermediate step, which leaves a window in
+    ///      which the address holds nothing; that is a defect, not a safeguard.
+    ///      The log stays complete because a change emits Removed then Added.
     function _setRole(address _addr, uint8 _role) internal {
         MaintainerStorage storage $ = _maintainer();
         uint8 prev_role = $.roles[_addr];
-        require(prev_role == NO_ROLE || _role == NO_ROLE);
+        if (prev_role == _role) return;
 
         $.roles[_addr] = _role;
-        if (prev_role == NO_ROLE) {
-            emit PropaneMaintainerRoleAdded(_addr, _role, msg.sender);
-        } else {
+
+        if (prev_role != NO_ROLE) {
             emit PropaneMaintainerRoleRemoved(_addr, msg.sender);
+        }
+        if (_role != NO_ROLE) {
+            emit PropaneMaintainerRoleAdded(_addr, _role, msg.sender);
         }
     }
 
-    function removeUniversalRole(address _addr) external override returns (bool) {
+    function removeUniversalRole(address _addr) external override onlySuperOwnerOrPorpaneOrOfficer returns (bool) {
         uint8 role = _maintainer().roles[_addr];
 
-        require(role != SUPER_OWNER || role != OWNER);
+        // `&&`, not `||`: any value differs from at least one of two distinct
+        // constants, so the disjunction can never revert.
+        require(role != SUPER_OWNER && role != OWNER, "Role cannot be removed");
         _setRole(_addr, NO_ROLE);
+        return true;
+    }
+
+    /// @notice Moves SUPER_OWNER in a single transaction. The only path by which
+    ///         SUPER_OWNER can ever change: `addUniversalRole` rejects it, and
+    ///         `removeUniversalRole` refuses to strip it.
+    function transferSuperOwner(address _newOwner) external override onlySuperOwner returns (bool) {
+        require(_newOwner != address(0), "Zero address");
+        require(_newOwner != msg.sender, "Already super owner");
+
+        MaintainerStorage storage $ = _maintainer();
+        require($.roles[_newOwner] == NO_ROLE, "Target already holds a role");
+
+        _setRole(msg.sender, NO_ROLE);
+        _setRole(_newOwner, SUPER_OWNER);
+        $.owner = _newOwner;
+
+        emit PropaneMaintainerSuperOwnerTransferred(msg.sender, _newOwner);
+        return true;
+    }
+
+    function superOwner() public view override returns (address) {
+        return _maintainer().owner;
     }
 
     function getRoles(address _addr) public view override returns (uint8) {
         return _maintainer().roles[_addr];
     }
+
+    /// @dev `virtual` so a deployment can tighten upgrade authority to a timelock
+    ///      or multisig. The prior art omits this and the authority is frozen.
+    function _authorizeUpgrade(address) internal virtual override onlySuperOwner {}
 }

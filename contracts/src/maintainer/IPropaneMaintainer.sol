@@ -15,9 +15,12 @@ abstract contract IPropaneMaintainer {
 
     event PropaneMaintainerRoleAdded(address indexed addr, uint8 role, address indexed sender);
     event PropaneMaintainerRoleRemoved(address indexed addr, address indexed sender);
+    event PropaneMaintainerSuperOwnerTransferred(address indexed from, address indexed to);
 
     function initialize() public virtual;
     function addUniversalRole(address _addr, uint8 _role) external virtual returns (bool);
     function removeUniversalRole(address _addr) external virtual returns (bool);
+    function transferSuperOwner(address _newOwner) external virtual returns (bool);
+    function superOwner() public view virtual returns (address);
     function getRoles(address _addr) public view virtual returns (uint8);
 }
