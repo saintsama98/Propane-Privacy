@@ -1,24 +1,41 @@
-# --- Foundry ---
+# --- Foundry build artefacts ---
 contracts/out/
 contracts/cache/
 contracts/broadcast/
 contracts/.forge-snapshots/
+contracts/lcov.info
+contracts/coverage/
 
-# --- Soldeer ---
-# Vendored dependency sources. foundry.toml [dependencies] and soldeer.lock are
-# the committed source of truth; restore with `forge soldeer install`.
+# --- Dependencies ---
+# D6: foundry.toml and soldeer.lock are the source of truth; restore with
+#   forge soldeer install --config-location foundry
 contracts/dependencies/
+lib/
 
 # --- Research: deliberately NOT published ---
 # This repository is public. The litepaper and technical notes are held back
 # pending a disclosure decision; they live only on local disk and are not
-# backed up by this remote. Remove this entry to publish them.
-silo/
+# backed up by this remote. Remove these entries to publish them.
+#
+# The leading slash anchors this to the repository root. Without it, a bare
+# `silo` also matches contracts/src/silo/storage/, which is source and must
+# stay tracked.
+/silo/
 index.md
+
+# Bucket decision records cite the reference implementations at source level and
+# are held back on the same basis as the technical notes.
+contracts/DECISIONS.md
+
+# Reference implementations are read-only third-party sources kept outside this
+# repository. Entry is defensive, in case a copy is ever placed inside it.
+/reference/
 
 # --- Local ---
 .env
 .env.*
 !.env.example
+.vscode/
+.idea/
 .DS_Store
 *.log
