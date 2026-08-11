@@ -2,22 +2,21 @@
 
 institutional compliance layer for real world assets | Re: onchain tokenization &amp; privacy
 
-## How this is being built
+## Overview
 
-Propane is being built bucket by bucket, where each bucket is a self-contained,
-independently testable unit that closes completely before the next one opens.
-The design is derived from a source-level reading of existing permissioned-token
-implementations rather than from their documentation: where the prior art has
-settled on something that works - a compliance check that is both enforced on
-transfer and simulatable by third parties beforehand, identity-scoped rather than
-address-scoped locks, ranked operator roles with genuine separation of duties-
-it is reproduced closely, and where it carries defects those are recorded and
-deliberately not reproduced. The contracts target Ethereum mainnet, use UUPS
-proxies with ERC-7201 namespaced storage, and decompose the rule surface into
-small independent modules rather than one large rule engine, so that no contract
-approaches the EIP-170 size limit. Every foundational decision, the alternatives
-rejected and the evidence behind it is recorded in
-[`contracts/DECISIONS.md`](contracts/DECISIONS.md).
+A service-oriented system: independently deployed, independently upgradeable
+contracts that resolve one another through a service registry rather than
+holding fixed references. Authority is rooted in a roles contract. A registry
+holds what has been attested about an investor; a compliance layer reads that
+record and returns a verdict; the asset carries no rules of its own.
+
+Compliance runs as two paths over one rule set — an authoritative path that
+enforces and records, and a non-mutating path that lets an integrating protocol
+establish in advance whether an operation would succeed. The rule surface is
+decomposed into independent modules rather than a single engine, so compliance
+posture is a deployment choice and the core stays instrument-agnostic.
+
+Ethereum mainnet. UUPS proxies, ERC-7201 namespaced storage.
 
 ## Status
 
