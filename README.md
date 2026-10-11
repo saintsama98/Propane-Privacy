@@ -23,3 +23,7 @@ Ethereum mainnet. UUPS proxies, ERC-7201 namespaced storage.
 **Research and development ongoing.** Nothing here is complete, audited or
 intended for production use. Interfaces, storage layouts and the contents of this
 repository are expected to change without notice.
+
+## License
+
+BUSL-1.1. See [`LICENSE`](LICENSE).
