@@ -92,12 +92,10 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 
 ## Status
 
-Research and development. Not audited and not deployed. Interfaces and storage layouts may still change.
+**Research and development ongoing.** Nothing here is complete, audited or
+intended for production use. Interfaces, storage layouts and the contents of this
+repository are expected to change without notice.
 
-Known limits of this build:
-- One wallet is one investor. Aggregating an investor across several wallets without a public wallet map is open.
-- Sender and recipient addresses are public. Amounts, balances and attributes are not.
-- About one full-rulebook transfer fits in a block at the test stack's default block limit. Mainnet block parameters have not been verified.
-- The record keeper is a single key.
+## License
 
-Next: multi-wallet investors, a threshold record keeper, regulator evidence for each verdict, and an independent review.
+BUSL-1.1. See [`LICENSE`](LICENSE).
