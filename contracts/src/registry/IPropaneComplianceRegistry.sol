@@ -2,33 +2,28 @@
 
 pragma solidity 0.8.28;
 
-/*compliance registry | wallet-to-investor resolution and the attested record read by every rule head*/
+import {externalEbool, externalEuint8} from "encrypted-types/EncryptedTypes.sol";
+import {IPropaneRegistry} from "../interfaces/IPropaneServices.sol";
+
+/*compliance registry | wallet registration and the encrypted attested record read by every rule*/
 /// @title IPropaneComplianceRegistry
 /// @author Propane
-/// @notice external surface of the registry / resolves a wallet to its investor and answers what is attested about them
-abstract contract IPropaneComplianceRegistry {
-    //compliance base pointers
-    uint8 public constant KYC_APPROVED = 0;
-    uint8 public constant REJECTED = 1;
-    uint8 public constant PENDING = 2;
+/// @notice Write surface of the registry. Attributes arrive as encrypted inputs from the transfer
+///         agent; the registry never sees them in the clear and stores no personal data in any form.
+interface IPropaneComplianceRegistry is IPropaneRegistry {
+    struct EncryptedAttributesInput {
+        externalEuint8 region;
+        externalEuint8 euCountry;
+        externalEbool accredited;
+        externalEbool qualified;
+        externalEbool liquidateOnly;
+    }
 
-    uint8 public constant ACCREDITED = 3;
+    event PropaneWalletRegistered(address indexed wallet);
+    event PropaneAttributesUpdated(address indexed wallet);
+    event PropaneWalletDeregistered(address indexed wallet);
 
-    //base modifiers
-
-    function registerInvestor(string calldata _id, string calldata _collision_hash) public virtual returns (bool);
-
-    function removeInvestor(string calldata _id) public virtual returns (bool);
-
-    function setCountry(string calldata _id, string memory _country) public virtual returns (bool);
-
-    function getCountry(string memory _id) public view virtual returns (string memory);
-
-    function getInvestor(address _address) public view virtual returns (string memory);
-
-    function isAccreditedInvestor(string calldata _id) external view virtual returns (bool);
-
-    function isAccreditedInvestor(address _wallet) external view virtual returns (bool);
-
-    //wallet level surface is ignored for now deliberately
+    function registerWallet(address wallet, EncryptedAttributesInput calldata attrs, bytes calldata proof) external;
+    function updateAttributes(address wallet, EncryptedAttributesInput calldata attrs, bytes calldata proof) external;
+    function deregisterWallet(address wallet) external;
 }

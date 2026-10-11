@@ -44,19 +44,23 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, IPropaneM
     //role based modifers | level essentials
 
     modifier onlySuperOwner() {
-        require(_maintainer().roles[msg.sender] == SUPER_OWNER);
+        require(_maintainer().roles[msg.sender] == SUPER_OWNER, "Not enough permissions");
         _;
     }
 
-    modifier onlySuperOwnerOrPorpane() {
-        require(_maintainer().roles[msg.sender] == SUPER_OWNER || _maintainer().roles[msg.sender] == PROPANE);
+    modifier onlySuperOwnerOrPropane() {
+        require(
+            _maintainer().roles[msg.sender] == SUPER_OWNER || _maintainer().roles[msg.sender] == PROPANE,
+            "Not enough permissions"
+        );
         _;
     }
 
-    modifier onlySuperOwnerOrPorpaneOrOfficer() {
+    modifier onlySuperOwnerOrPropaneOrOfficer() {
         require(
             _maintainer().roles[msg.sender] == SUPER_OWNER || _maintainer().roles[msg.sender] == PROPANE
-                || _maintainer().roles[msg.sender] == OFFICER
+                || _maintainer().roles[msg.sender] == OFFICER,
+            "Not enough permissions"
         );
         _;
     }
@@ -69,12 +73,27 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, IPropaneM
     function addUniversalRole(address _addr, uint8 _role)
         external
         override
-        onlySuperOwnerOrPorpaneOrOfficer
+        onlySuperOwnerOrPropaneOrOfficer
         returns (bool)
     {
         require(_role == OWNER || _role == PROPANE || _role == OFFICER, "No such authority provided");
+        _requireCanManage(_maintainer().roles[_addr], _role);
         _setRole(_addr, _role);
         return true;
+    }
+
+    /// @dev Scope of a role-management call, equivalent to the prior art's
+    ///      `onlySameRole` and `onlySameRoleForAddress` guards. SUPER_OWNER may
+    ///      manage any address except its own entry. Any other caller may only
+    ///      grant or remove its own role, and only on an address that holds no
+    ///      role or that same role. Without this, OFFICER could grant OWNER or
+    ///      overwrite the SUPER_OWNER entry and lock upgrades permanently.
+    function _requireCanManage(uint8 _targetRole, uint8 _newRole) internal view {
+        require(_targetRole != SUPER_OWNER, "Cannot modify super owner");
+        uint8 callerRole = _maintainer().roles[msg.sender];
+        if (callerRole == SUPER_OWNER) return;
+        require(_newRole == callerRole, "Only same role allowed");
+        require(_targetRole == NO_ROLE || _targetRole == callerRole, "Only same role allowed");
     }
 
     /// @dev Direct role-to-role transitions are permitted deliberately. The prior
@@ -96,12 +115,13 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, IPropaneM
         }
     }
 
-    function removeUniversalRole(address _addr) external override onlySuperOwnerOrPorpaneOrOfficer returns (bool) {
+    function removeUniversalRole(address _addr) external override onlySuperOwnerOrPropaneOrOfficer returns (bool) {
         uint8 role = _maintainer().roles[_addr];
 
         // `&&`, not `||`: any value differs from at least one of two distinct
         // constants, so the disjunction can never revert.
         require(role != SUPER_OWNER && role != OWNER, "Role cannot be removed");
+        _requireCanManage(role, role);
         _setRole(_addr, NO_ROLE);
         return true;
     }

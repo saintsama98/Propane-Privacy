@@ -2,16 +2,18 @@
 
 pragma solidity 0.8.28;
 
+import {PropaneRoles} from "../common/PropaneConstants.sol";
+
 /*roles maintaining all the propane substrate for all upgrades*/
 /// @title IPropaneMaintainer
 /// @author Propane
 /// @notice initial owner layer for ensuring systematic updation and regulation of propane substrate / a constraint layer essential
 abstract contract IPropaneMaintainer {
-    uint8 public constant NO_ROLE = 0;
-    uint8 public constant SUPER_OWNER = 1;
-    uint8 public constant OWNER = 2;
-    uint8 public constant PROPANE = 3;
-    uint8 public constant OFFICER = 4;
+    uint8 public constant NO_ROLE = PropaneRoles.ROLE_NONE;
+    uint8 public constant SUPER_OWNER = PropaneRoles.ROLE_SUPER_OWNER;
+    uint8 public constant OWNER = PropaneRoles.ROLE_OWNER;
+    uint8 public constant PROPANE = PropaneRoles.ROLE_PROPANE;
+    uint8 public constant OFFICER = PropaneRoles.ROLE_OFFICER;
 
     event PropaneMaintainerRoleAdded(address indexed addr, uint8 role, address indexed sender);
     event PropaneMaintainerRoleRemoved(address indexed addr, address indexed sender);
