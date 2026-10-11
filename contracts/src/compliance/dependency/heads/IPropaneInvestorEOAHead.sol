@@ -2,8 +2,9 @@
 
 pragma solidity 0.8.28;
 
-/*investor EOA head | account-shape rule module for the compliance engine*/
+import {IPropaneRuleHead} from "../../../interfaces/IPropaneServices.sol";
+
 /// @title IPropaneInvestorEOAHead
 /// @author Propane
-/// @notice rule head answering whether an investor account satisfies the required account shape / an independent module resolved by the engine
-abstract contract IPropaneInvestorEOAHead {}
+/// @notice Rule head, account-shape rule: the recipient must be an externally owned account unless it is a platform wallet. An independent module resolved by the engine.
+interface IPropaneInvestorEOAHead is IPropaneRuleHead {}

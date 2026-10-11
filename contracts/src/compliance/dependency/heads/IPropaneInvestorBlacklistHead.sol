@@ -2,8 +2,12 @@
 
 pragma solidity 0.8.28;
 
-/*investor blacklist head | denied-investor rule module for the compliance engine*/
+import {IPropaneRuleHead} from "../../../interfaces/IPropaneServices.sol";
+import {externalEbool, externalEuint64} from "encrypted-types/EncryptedTypes.sol";
+
 /// @title IPropaneInvestorBlacklistHead
 /// @author Propane
-/// @notice rule head answering whether an investor is denied / an independent module resolved by the engine
-abstract contract IPropaneInvestorBlacklistHead {}
+/// @notice Rule head, denied investors: neither party may be on the encrypted deny list. An independent module resolved by the engine.
+interface IPropaneInvestorBlacklistHead is IPropaneRuleHead {
+    function setBlacklisted(address wallet, externalEbool listed, bytes calldata proof) external;
+}
