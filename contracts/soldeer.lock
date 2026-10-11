@@ -1,4 +1,18 @@
 [[dependencies]]
+name = "@encrypted-types"
+version = "0.0.4"
+url = "https://soldeer-revisions.s3.amazonaws.com/@encrypted-types/0_0_4_17-03-2026_15:04:04_encrypted-types.zip"
+checksum = "bd52cab2aaeb7083892adab700e292a5b93d9a7f321f1eb1e3aef6d7f86f2977"
+integrity = "443255d91dbfb920c9fabf76338db99ae2a60f6aefcff5cd79c21fda8c504707"
+
+[[dependencies]]
+name = "@fhevm-solidity"
+version = "0.11.1"
+url = "https://soldeer-revisions.s3.amazonaws.com/@fhevm-solidity/0_11_1_23-03-2026_15:50:59_library-solidity.zip"
+checksum = "09f78377b1e0429b09669e5f78bffa2cfb98b641a64a349dea0776ec68379dc6"
+integrity = "67f415709d30b01d3876addb7e5bbaf3efc119cebe81dda10fb495163297b763"
+
+[[dependencies]]
 name = "@openzeppelin-contracts"
 version = "5.7.0"
 git = "https://github.com/OpenZeppelin/openzeppelin-contracts.git"
@@ -9,6 +23,12 @@ name = "@openzeppelin-contracts-upgradeable"
 version = "5.7.0"
 git = "https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable.git"
 rev = "14f52c54d3a1eefbda3d4071efba24d3c1e07e8a"
+
+[[dependencies]]
+name = "forge-fhevm"
+version = "3ee696f"
+git = "https://github.com/zama-ai/forge-fhevm.git"
+rev = "3ee696fba62a32314fde457de28cc29f1191c4cb"
 
 [[dependencies]]
 name = "forge-std"
