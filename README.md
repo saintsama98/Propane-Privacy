@@ -1,6 +1,6 @@
 # Propane-Privacy
 
-Institutional compliance layer for RWAs and multi strategy funds 
+Institutional compliance layer for RWAs and multi strategy funds.
 
 A permissioned security token can encrypt its balances and still publish its holder base. The rules that make an asset a regulated one are not only about who may hold it. They also count the holders: no more than so many investors in total, per jurisdiction, per category, and never fewer than a minimum. Those rules need the whole holder base to evaluate, so existing confidential token designs either leave them out or keep the census in the clear.
 
@@ -69,7 +69,9 @@ Nothing in this path reverts on an encrypted condition. A refused transfer moves
 
 A role other than super owner can only grant or remove its own role.
 
-## Build
+## Build and test
+
+Foundry, solc 0.8.28, EVM `cancun`. Dependencies are installed with Soldeer.
 
 ```shell
 cd contracts
