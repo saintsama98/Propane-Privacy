@@ -2,6 +2,8 @@
 
 Institutional compliance layer for RWAs and multi strategy funds.
 
+> This project was developed privately and published once it had been tested against its original design. Its full development history is published on a single `main` branch so reviewers can follow it in one place.
+
 A permissioned security token can encrypt its balances and still publish its holder base. The rules that make an asset a regulated one are not only about who may hold it. They also count the holders: no more than so many investors in total, per jurisdiction, per category, and never fewer than a minimum. Those rules need the whole holder base to evaluate, so existing confidential token designs either leave them out or keep the census in the clear.
 
 Propane enforces the full permissioned-token rulebook, including the investor census, over encrypted state. Balances, transfer amounts, investor attributes and the investor counts are all encrypted with fully homomorphic encryption (Zama fhEVM). The chain learns that a transfer happened and that the issuer's rules were satisfied. It does not learn who holds what, which rule refused a transfer, or how close any category is to its cap.
