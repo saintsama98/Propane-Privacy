@@ -69,6 +69,13 @@ interface IPropaneRegistry {
     function attributes(address wallet) external view returns (PropaneAttributes memory);
 }
 
+/// @title IPropaneRegistryEnumerable
+/// @notice Enumeration surface of the registry, used only by census recomputation.
+interface IPropaneRegistryEnumerable {
+    function walletCount() external view returns (uint256);
+    function walletAt(uint256 index) external view returns (address);
+}
+
 /// @title IPropaneCompliance
 /// @notice Compliance service. Mutating paths are callable only by the token or the registry.
 interface IPropaneCompliance {

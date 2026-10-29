@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {PropaneFixture} from "../system/PropaneFixture.sol";
-import {PropaneComplianceEngine} from "../../src/compliance/orbex/propaneEngine.sol";
+import {PropaneFixture} from "../scenario/PropaneFixture.sol";
+import {PropaneComplianceEngine} from "../../src/compliance/engine/PropaneComplianceEngine.sol";
 import {PropaneServices} from "../../src/common/PropaneConstants.sol";
-import {PropaneInvestorBlacklistHead} from "../../src/compliance/dependency/heads/propaneInvestorBlacklistHead.sol";
-import {PropaneInvestorTempBarredHead} from "../../src/compliance/dependency/heads/propaneInvestorTempBarredHead.sol";
-import {PropaneInvestorWhitelistHead} from "../../src/compliance/dependency/heads/propaneInvestorWhitelistHead.sol";
-import {PropaneInvestorEOAHead} from "../../src/compliance/dependency/heads/propaneInvestorEOAHead.sol";
+import {PropaneInvestorBlacklistHead} from "../../src/compliance/heads/PropaneInvestorBlacklistHead.sol";
+import {PropaneInvestorTempBarredHead} from "../../src/compliance/heads/PropaneInvestorTempBarredHead.sol";
+import {PropaneInvestorWhitelistHead} from "../../src/compliance/heads/PropaneInvestorWhitelistHead.sol";
+import {PropaneInvestorEOAHead} from "../../src/compliance/heads/PropaneInvestorEOAHead.sol";
 import {externalEbool, externalEuint64} from "encrypted-types/EncryptedTypes.sol";
 
 /// @notice The worst-case workload under the host contract's unmodified HCU limits (20M per

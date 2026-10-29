@@ -2,16 +2,16 @@
 pragma solidity 0.8.28;
 
 import {console2} from "forge-std/console2.sol";
-import {PropaneFixture} from "../system/PropaneFixture.sol";
-import {PropaneComplianceEngine} from "../../src/compliance/orbex/propaneEngine.sol";
+import {PropaneFixture} from "../scenario/PropaneFixture.sol";
+import {PropaneComplianceEngine} from "../../src/compliance/engine/PropaneComplianceEngine.sol";
 import {IHCULimit} from "forge-fhevm/generated/interfaces/IHCULimit.sol";
 import {hcuLimitAdd} from "forge-fhevm/fhevm-host/addresses/FHEVMHostAddresses.sol";
 import {externalEuint64} from "encrypted-types/EncryptedTypes.sol";
 import {PropaneServices} from "../../src/common/PropaneConstants.sol";
-import {PropaneInvestorBlacklistHead} from "../../src/compliance/dependency/heads/propaneInvestorBlacklistHead.sol";
-import {PropaneInvestorTempBarredHead} from "../../src/compliance/dependency/heads/propaneInvestorTempBarredHead.sol";
-import {PropaneInvestorWhitelistHead} from "../../src/compliance/dependency/heads/propaneInvestorWhitelistHead.sol";
-import {PropaneInvestorEOAHead} from "../../src/compliance/dependency/heads/propaneInvestorEOAHead.sol";
+import {PropaneInvestorBlacklistHead} from "../../src/compliance/heads/PropaneInvestorBlacklistHead.sol";
+import {PropaneInvestorTempBarredHead} from "../../src/compliance/heads/PropaneInvestorTempBarredHead.sol";
+import {PropaneInvestorWhitelistHead} from "../../src/compliance/heads/PropaneInvestorWhitelistHead.sol";
+import {PropaneInvestorEOAHead} from "../../src/compliance/heads/PropaneInvestorEOAHead.sol";
 
 /// @notice HCU measurement. Records the HCU consumed by each operation under several rulebook
 ///         profiles, against the host contract's per-transaction and per-block limits. Limits are

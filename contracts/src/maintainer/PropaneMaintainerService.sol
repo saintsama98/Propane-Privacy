@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.28;
 
-import {PropaneMaintainer} from "./propaneMaintainer.sol";
+import {PropaneMaintainer} from "./PropaneMaintainer.sol";
 
 /// @title PropaneMaintainerService
 /// @author Propane

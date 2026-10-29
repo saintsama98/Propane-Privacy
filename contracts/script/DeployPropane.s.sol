@@ -4,12 +4,12 @@ pragma solidity 0.8.28;
 import {Script, console2} from "forge-std/Script.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {PropaneMaintainerService} from "../src/maintainer/PropaneMaintainerService.sol";
-import {PropaneInstitutional} from "../src/institution/propaneInstitutional.sol";
-import {PropaneComplianceRegistry} from "../src/registry/propaneComplianceRegistry.sol";
-import {PropaneComplianceEngine} from "../src/compliance/orbex/propaneEngine.sol";
-import {PropaneCensus} from "../src/compliance/census/propaneCensus.sol";
-import {PropaneInvestorLockHead} from "../src/compliance/dependency/heads/propaneInvestorLockHead.sol";
-import {PropaneSecurityToken} from "../src/security/propaneSecurityToken.sol";
+import {PropaneInstitutional} from "../src/institution/PropaneInstitutional.sol";
+import {PropaneComplianceRegistry} from "../src/registry/PropaneComplianceRegistry.sol";
+import {PropaneComplianceEngine} from "../src/compliance/engine/PropaneComplianceEngine.sol";
+import {PropaneCensus} from "../src/compliance/census/PropaneCensus.sol";
+import {PropaneInvestorLockHead} from "../src/compliance/heads/PropaneInvestorLockHead.sol";
+import {PropaneSecurityToken} from "../src/security/PropaneSecurityToken.sol";
 import {PropaneRoles, PropaneServices} from "../src/common/PropaneConstants.sol";
 
 /// @notice Deploys the Propane system behind UUPS proxies on an fhEVM-enabled chain (the FHE
