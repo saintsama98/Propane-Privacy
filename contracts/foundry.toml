@@ -53,7 +53,7 @@ cbor_metadata = false
 # compiled with a size-oriented profile; its runtime cost is dominated by FHE operations, which the
 # optimizer does not affect. Every other contract keeps the default profile.
 additional_compiler_profiles = [{ name = "size", optimizer_runs = 200 }]
-compilation_restrictions = [{ paths = "src/compliance/orbex/propaneEngine.sol", optimizer_runs = 200 }]
+compilation_restrictions = [{ paths = "src/compliance/engine/PropaneComplianceEngine.sol", optimizer_runs = 200 }]
 
 # fhEVM tracks per-transaction HCU and transient ACL grants in transient storage. Without isolation a
 # whole test function runs as one transaction, which both overstates HCU and hides missing persistent

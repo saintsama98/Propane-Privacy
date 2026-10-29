@@ -86,13 +86,13 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 
 | Suite | Covers |
 |---|---|
-| `test/system/CoreFlows.t.sol` | Issue, transfer, refusals, freeze, forced transfer, seizure, burn, attribute changes, sender exit |
-| `test/system/Rules.t.sol` | Each rule family, with the census exemptions exercised explicitly |
-| `test/system/Privacy.t.sol` | Who may decrypt which handle; pre-check scoping; engine, census and token guards |
-| `test/system/CensusSequence.t.sol` | The census invariant under random sequences, and recomputation |
-| `test/system/Heads.t.sol`, `Upgrades.t.sol` | Rule heads; upgrade authority, state preservation, compliance swap |
+| `test/scenario/CoreFlows.t.sol` | Issue, transfer, refusals, freeze, forced transfer, seizure, burn, attribute changes, sender exit |
+| `test/scenario/Rules.t.sol` | Each rule family, with the census exemptions exercised explicitly |
+| `test/scenario/Privacy.t.sol` | Who may decrypt which handle; pre-check scoping; engine, census and token guards |
+| `test/scenario/CensusSequence.t.sol` | The census invariant under random sequences, and recomputation |
+| `test/scenario/Heads.t.sol`, `Upgrades.t.sol` | Rule heads; upgrade authority, state preservation, compliance swap |
 | `test/measure/` | HCU per operation, and the worst case under the unmodified host limits |
-| `test/maintainer/` | Role scoping: unit, stateful invariant, Halmos |
+| `test/unit/`, `test/invariant/`, `test/formal/` | Role scoping (unit, stateful invariant, Halmos), storage namespace slots, an fhEVM smoke test |
 
 ## Status
 
