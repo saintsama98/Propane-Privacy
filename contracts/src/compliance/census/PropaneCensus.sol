@@ -26,6 +26,9 @@ import {IPropaneSecurityToken} from "../../security/IPropaneSecurityToken.sol";
 /// @dev Separated from the engine for two reasons: the census is the novel component and is easier
 ///      to verify in isolation, and the engine alone stays within the EIP-170 size limit.
 contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
+    error PropaneNotRecomputing();
+    error PropaneRecomputeIncomplete();
+
     uint8 public constant CENSUS_EU_SLOTS = 4;
 
     /// @custom:storage-location erc7201:propane.storage.Census
@@ -179,7 +182,7 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
     /// @notice Processes up to `count` registered wallets in registry order. Callable by anyone.
     function continueRecompute(uint256 count) external {
         CensusStorage storage $ = _c();
-        require($.recomputing, "Not recomputing");
+        require($.recomputing, PropaneNotRecomputing());
         IPropaneRegistryEnumerable reg = IPropaneRegistryEnumerable(_service(PropaneServices.SVC_REGISTRY));
         IPropaneSecurityToken token = IPropaneSecurityToken(_service(PropaneServices.SVC_TOKEN));
         IPropaneCompliance compliance = IPropaneCompliance(_service(PropaneServices.SVC_COMPLIANCE));
@@ -199,10 +202,10 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
 
     function finishRecompute() external onlyRoles2(PropaneRoles.ROLE_OFFICER, PropaneRoles.ROLE_SUPER_OWNER) {
         CensusStorage storage $ = _c();
-        require($.recomputing, "Not recomputing");
+        require($.recomputing, PropaneNotRecomputing());
         require(
             $.recomputeCursor == IPropaneRegistryEnumerable(_service(PropaneServices.SVC_REGISTRY)).walletCount(),
-            "Recompute incomplete"
+            PropaneRecomputeIncomplete()
         );
         $.live = $.shadow;
         $.recomputing = false;

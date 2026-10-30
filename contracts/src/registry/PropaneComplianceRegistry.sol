@@ -20,6 +20,10 @@ contract PropaneComplianceRegistry is
     PropaneComplianceRegistryStorage,
     IPropaneComplianceRegistry
 {
+    error PropaneZeroWallet();
+    error PropaneAlreadyRegistered();
+    error PropaneNotRegistered();
+
     function initialize(address locator_) external initializer {
         __PropaneServiceConsumer_init(locator_);
     }
@@ -28,9 +32,9 @@ contract PropaneComplianceRegistry is
         external
         onlyRoles2(PropaneRoles.ROLE_OFFICER, PropaneRoles.ROLE_SUPER_OWNER)
     {
-        require(wallet != address(0), "Zero wallet");
+        require(wallet != address(0), PropaneZeroWallet());
         WalletRecord storage r = _complianceRegistry().records[wallet];
-        require(!r.registered, "Already registered");
+        require(!r.registered, PropaneAlreadyRegistered());
         bool known = FHE.isInitialized(r.attrs.region);
         r.registered = true;
         if (!known) _complianceRegistry().wallets.push(wallet);
@@ -43,7 +47,7 @@ contract PropaneComplianceRegistry is
         onlyRoles2(PropaneRoles.ROLE_OFFICER, PropaneRoles.ROLE_SUPER_OWNER)
     {
         WalletRecord storage r = _complianceRegistry().records[wallet];
-        require(r.registered, "Not registered");
+        require(r.registered, PropaneNotRegistered());
         _write(wallet, r, attrs, proof);
         emit PropaneAttributesUpdated(wallet);
     }
@@ -55,7 +59,7 @@ contract PropaneComplianceRegistry is
         onlyRoles2(PropaneRoles.ROLE_OFFICER, PropaneRoles.ROLE_SUPER_OWNER)
     {
         WalletRecord storage r = _complianceRegistry().records[wallet];
-        require(r.registered, "Not registered");
+        require(r.registered, PropaneNotRegistered());
         r.registered = false;
         emit PropaneWalletDeregistered(wallet);
     }
