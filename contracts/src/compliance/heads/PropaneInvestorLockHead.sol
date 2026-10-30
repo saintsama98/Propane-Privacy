@@ -16,6 +16,8 @@ import {IPropaneInvestorLockHead} from "./IPropaneInvestorLockHead.sol";
 ///         period. The lock period depends on the sender's encrypted region, so each record
 ///         contributes a select between its US and non-US lock state.
 contract PropaneInvestorLockHead is PropaneServiceConsumer, IPropaneInvestorLockHead {
+    error PropaneTooManyOpenIssuances();
+
     uint256 public constant MAX_OPEN_ISSUANCES = 8;
 
     struct Issuance {
@@ -58,7 +60,7 @@ contract PropaneInvestorLockHead is PropaneServiceConsumer, IPropaneInvestorLock
                 iss.pop();
             }
         }
-        require(iss.length < MAX_OPEN_ISSUANCES, "Too many open issuances");
+        require(iss.length < MAX_OPEN_ISSUANCES, PropaneTooManyOpenIssuances());
         FHE.allowThis(amount);
         address keeper = _recordKeeper();
         if (keeper != address(0)) FHE.allow(amount, keeper);

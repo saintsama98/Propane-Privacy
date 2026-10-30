@@ -15,6 +15,9 @@ import {IPropaneSecurityToken} from "./IPropaneSecurityToken.sol";
 ///         service, which returns the amount that may move: the requested amount or zero. A refused
 ///         transfer does not revert, so a failed compliance check is not published.
 contract PropaneSecurityToken is PropaneServiceConsumer, IPropaneSecurityToken {
+    error PropaneAmountNotAllowed();
+    error PropaneSameAccount();
+
     /// @custom:storage-location erc7201:propane.storage.SecurityToken
     struct SecurityTokenStorage {
         string name;
@@ -97,7 +100,7 @@ contract PropaneSecurityToken is PropaneServiceConsumer, IPropaneSecurityToken {
     }
 
     function confidentialTransfer(address to, euint64 amount) external returns (euint64 transferred) {
-        require(FHE.isSenderAllowed(amount), "Amount not allowed");
+        require(FHE.isSenderAllowed(amount), PropaneAmountNotAllowed());
         return _transfer(msg.sender, to, amount);
     }
 
@@ -158,7 +161,7 @@ contract PropaneSecurityToken is PropaneServiceConsumer, IPropaneSecurityToken {
         returns (euint64 moved)
     {
         // A forced self-transfer changes no holding and would miscount the census.
-        require(from != to, "Same account");
+        require(from != to, PropaneSameAccount());
         _requireReceiver(to);
         euint64 amt = FHE.fromExternal(amount, proof);
         euint64 bal = _balanceOf(from);
