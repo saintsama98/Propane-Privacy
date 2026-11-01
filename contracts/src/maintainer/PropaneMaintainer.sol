@@ -7,6 +7,15 @@ import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/U
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMaintainerBase {
+    error PropaneNotEnoughPermissions();
+    error PropaneUnknownRole();
+    error PropaneCannotModifySuperOwner();
+    error PropaneOnlySameRole();
+    error PropaneRoleCannotBeRemoved();
+    error PropaneZeroAddress();
+    error PropaneAlreadySuperOwner();
+    error PropaneTargetHoldsRole();
+
     /*roles maintaining all the propane substrate for all upgrades*/
     // @title A title that should describe the contract/interface
     /// @author Propane
@@ -44,14 +53,14 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
     //role based modifers | level essentials
 
     modifier onlySuperOwner() {
-        require(_maintainer().roles[msg.sender] == SUPER_OWNER, "Not enough permissions");
+        require(_maintainer().roles[msg.sender] == SUPER_OWNER, PropaneNotEnoughPermissions());
         _;
     }
 
     modifier onlySuperOwnerOrPropane() {
         require(
             _maintainer().roles[msg.sender] == SUPER_OWNER || _maintainer().roles[msg.sender] == PROPANE,
-            "Not enough permissions"
+            PropaneNotEnoughPermissions()
         );
         _;
     }
@@ -60,7 +69,7 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
         require(
             _maintainer().roles[msg.sender] == SUPER_OWNER || _maintainer().roles[msg.sender] == PROPANE
                 || _maintainer().roles[msg.sender] == OFFICER,
-            "Not enough permissions"
+            PropaneNotEnoughPermissions()
         );
         _;
     }
@@ -76,7 +85,7 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
         onlySuperOwnerOrPropaneOrOfficer
         returns (bool)
     {
-        require(_role == OWNER || _role == PROPANE || _role == OFFICER, "No such authority provided");
+        require(_role == OWNER || _role == PROPANE || _role == OFFICER, PropaneUnknownRole());
         _requireCanManage(_maintainer().roles[_addr], _role);
         _setRole(_addr, _role);
         return true;
@@ -89,11 +98,11 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
     ///      role or that same role. Without this, OFFICER could grant OWNER or
     ///      overwrite the SUPER_OWNER entry and lock upgrades permanently.
     function _requireCanManage(uint8 _targetRole, uint8 _newRole) internal view {
-        require(_targetRole != SUPER_OWNER, "Cannot modify super owner");
+        require(_targetRole != SUPER_OWNER, PropaneCannotModifySuperOwner());
         uint8 callerRole = _maintainer().roles[msg.sender];
         if (callerRole == SUPER_OWNER) return;
-        require(_newRole == callerRole, "Only same role allowed");
-        require(_targetRole == NO_ROLE || _targetRole == callerRole, "Only same role allowed");
+        require(_newRole == callerRole, PropaneOnlySameRole());
+        require(_targetRole == NO_ROLE || _targetRole == callerRole, PropaneOnlySameRole());
     }
 
     /// @dev Direct role-to-role transitions are permitted deliberately. The prior
@@ -120,7 +129,7 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
 
         // `&&`, not `||`: any value differs from at least one of two distinct
         // constants, so the disjunction can never revert.
-        require(role != SUPER_OWNER && role != OWNER, "Role cannot be removed");
+        require(role != SUPER_OWNER && role != OWNER, PropaneRoleCannotBeRemoved());
         _requireCanManage(role, role);
         _setRole(_addr, NO_ROLE);
         return true;
@@ -130,11 +139,11 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
     ///         SUPER_OWNER can ever change: `addUniversalRole` rejects it, and
     ///         `removeUniversalRole` refuses to strip it.
     function transferSuperOwner(address _newOwner) external override onlySuperOwner returns (bool) {
-        require(_newOwner != address(0), "Zero address");
-        require(_newOwner != msg.sender, "Already super owner");
+        require(_newOwner != address(0), PropaneZeroAddress());
+        require(_newOwner != msg.sender, PropaneAlreadySuperOwner());
 
         MaintainerStorage storage $ = _maintainer();
-        require($.roles[_newOwner] == NO_ROLE, "Target already holds a role");
+        require($.roles[_newOwner] == NO_ROLE, PropaneTargetHoldsRole());
 
         _setRole(msg.sender, NO_ROLE);
         _setRole(_newOwner, SUPER_OWNER);

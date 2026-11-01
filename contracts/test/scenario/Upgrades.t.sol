@@ -7,6 +7,7 @@ import {PropaneCensus} from "../../src/compliance/census/PropaneCensus.sol";
 import {PropaneSecurityToken} from "../../src/security/PropaneSecurityToken.sol";
 import {PropaneServiceConsumer} from "../../src/common/PropaneServiceConsumer.sol";
 import {PropaneServices} from "../../src/common/PropaneConstants.sol";
+import {PropaneInstitutional} from "../../src/institution/PropaneInstitutional.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract UpgradesTest is PropaneFixture {
@@ -71,10 +72,10 @@ contract UpgradesTest is PropaneFixture {
 
     function test_onlyOperatorOrRootWiresServices() public {
         vm.prank(issuer);
-        vm.expectRevert("Not enough permissions");
+        vm.expectRevert(PropaneInstitutional.PropaneNotEnoughPermissions.selector);
         loc.setInstitutionalService(PropaneServices.SVC_COMPLIANCE, address(0xdead));
         vm.prank(operator);
-        vm.expectRevert("Not enough permissions");
+        vm.expectRevert(PropaneInstitutional.PropaneNotEnoughPermissions.selector);
         loc.setInstitutionalService(PropaneServices.SVC_ROLES, address(0xdead));
     }
 }

@@ -35,6 +35,10 @@ import {IPropaneSecurityToken} from "../../security/IPropaneSecurityToken.sol";
 ///        subject, its delegate, or the transfer agent.
 ///      Rule order and reason codes follow the prior art so behaviour can be compared rule by rule.
 contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
+    error PropaneTooManyEUSlots();
+    error PropaneEUSlotsCannotShrink();
+    error PropaneConfigNotReady();
+
     uint8 public constant MAX_EU_SLOTS = 4;
     uint64 public constant CONFIG_DELAY = 1 days;
 
@@ -125,7 +129,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
 
     function initialize(address locator_, Config calldata config_) external initializer {
         __PropaneServiceConsumer_init(locator_);
-        require(config_.limits.euCountrySlots <= MAX_EU_SLOTS, "Too many EU slots");
+        require(config_.limits.euCountrySlots <= MAX_EU_SLOTS, PropaneTooManyEUSlots());
         _s().config = config_;
     }
 
@@ -138,9 +142,9 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
         onlyRoles2(PropaneRoles.ROLE_OWNER, PropaneRoles.ROLE_SUPER_OWNER)
     {
         EngineStorage storage $ = _s();
-        require(next.limits.euCountrySlots <= MAX_EU_SLOTS, "Too many EU slots");
+        require(next.limits.euCountrySlots <= MAX_EU_SLOTS, PropaneTooManyEUSlots());
         // Shrinking the EU slot set would orphan holders counted in the dropped slots.
-        require(next.limits.euCountrySlots >= $.config.limits.euCountrySlots, "EU slots cannot shrink");
+        require(next.limits.euCountrySlots >= $.config.limits.euCountrySlots, PropaneEUSlotsCannotShrink());
         $.pending = next;
         $.pendingEta = uint64(block.timestamp) + CONFIG_DELAY;
         emit PropaneConfigScheduled($.pendingEta);
@@ -148,7 +152,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
 
     function applyConfig() external {
         EngineStorage storage $ = _s();
-        require($.pendingEta != 0 && block.timestamp >= $.pendingEta, "Not ready");
+        require($.pendingEta != 0 && block.timestamp >= $.pendingEta, PropaneConfigNotReady());
         $.config = $.pending;
         $.pendingEta = 0;
         emit PropaneConfigApplied();

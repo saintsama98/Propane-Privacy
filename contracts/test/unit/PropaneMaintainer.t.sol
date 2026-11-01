@@ -33,21 +33,21 @@ contract PropaneMaintainerTest is Test {
     function test_officerCannotGrantOwner() public {
         uint8 role = m.OWNER();
         vm.prank(officer);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneOnlySameRole.selector);
         m.addUniversalRole(stranger, role);
     }
 
     function test_officerCannotGrantPropane() public {
         uint8 role = m.PROPANE();
         vm.prank(officer);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneOnlySameRole.selector);
         m.addUniversalRole(stranger, role);
     }
 
     function test_officerCannotOverwriteSuperOwner() public {
         uint8 role = m.OFFICER();
         vm.prank(officer);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneCannotModifySuperOwner.selector);
         m.addUniversalRole(address(this), role);
         assertEq(m.getRoles(m.superOwner()), m.SUPER_OWNER());
     }
@@ -55,26 +55,26 @@ contract PropaneMaintainerTest is Test {
     function test_propaneCannotOverwriteSuperOwner() public {
         uint8 role = m.PROPANE();
         vm.prank(propane);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneCannotModifySuperOwner.selector);
         m.addUniversalRole(address(this), role);
     }
 
     function test_superOwnerCannotDemoteSelfThroughAdd() public {
         uint8 role = m.OFFICER();
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneCannotModifySuperOwner.selector);
         m.addUniversalRole(address(this), role);
     }
 
     function test_officerCannotRewriteOwner() public {
         uint8 role = m.OFFICER();
         vm.prank(officer);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneOnlySameRole.selector);
         m.addUniversalRole(owner_, role);
     }
 
     function test_officerCannotRemovePropane() public {
         vm.prank(officer);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneOnlySameRole.selector);
         m.removeUniversalRole(propane);
     }
 
@@ -99,12 +99,12 @@ contract PropaneMaintainerTest is Test {
     function test_strangerCannotGrant() public {
         uint8 role = m.OFFICER();
         vm.prank(stranger);
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneNotEnoughPermissions.selector);
         m.addUniversalRole(stranger, role);
     }
 
     function test_superOwnerCannotBeRemoved() public {
-        vm.expectRevert();
+        vm.expectRevert(PropaneMaintainer.PropaneRoleCannotBeRemoved.selector);
         m.removeUniversalRole(address(this));
     }
 
@@ -114,6 +114,29 @@ contract PropaneMaintainerTest is Test {
         assertEq(m.superOwner(), next);
         assertEq(m.getRoles(next), m.SUPER_OWNER());
         assertEq(m.getRoles(address(this)), m.NO_ROLE());
+    }
+
+    function test_onlyDelegableRolesCanBeGranted() public {
+        uint8 role = m.SUPER_OWNER();
+        vm.expectRevert(PropaneMaintainer.PropaneUnknownRole.selector);
+        m.addUniversalRole(stranger, role);
+    }
+
+    function test_ownerCannotBeRemoved() public {
+        vm.expectRevert(PropaneMaintainer.PropaneRoleCannotBeRemoved.selector);
+        m.removeUniversalRole(owner_);
+    }
+
+    function test_transferSuperOwnerGuards() public {
+        vm.expectRevert(PropaneMaintainer.PropaneZeroAddress.selector);
+        m.transferSuperOwner(address(0));
+        vm.expectRevert(PropaneMaintainer.PropaneAlreadySuperOwner.selector);
+        m.transferSuperOwner(address(this));
+        vm.expectRevert(PropaneMaintainer.PropaneTargetHoldsRole.selector);
+        m.transferSuperOwner(officer);
+        vm.prank(stranger);
+        vm.expectRevert(PropaneMaintainer.PropaneNotEnoughPermissions.selector);
+        m.transferSuperOwner(stranger);
     }
 
     function test_maintainerNamespaceSlot() public pure {

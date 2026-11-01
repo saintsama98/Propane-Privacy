@@ -3,6 +3,7 @@ pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";
 import {PropaneComplianceEngine} from "../../src/compliance/engine/PropaneComplianceEngine.sol";
+import {PropaneCensus} from "../../src/compliance/census/PropaneCensus.sol";
 
 /// @notice Census invariant under arbitrary operation sequences: after every operation, each
 ///         encrypted counter equals the count recomputed in the clear from balances and attributes.
@@ -101,7 +102,7 @@ contract CensusSequenceTest is PropaneFixture {
         census.beginRecompute();
         census.continueRecompute(2);
         vm.prank(ta);
-        vm.expectRevert("Recompute incomplete");
+        vm.expectRevert(PropaneCensus.PropaneRecomputeIncomplete.selector);
         census.finishRecompute();
     }
 }

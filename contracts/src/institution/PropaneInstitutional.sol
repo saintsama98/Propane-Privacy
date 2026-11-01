@@ -19,13 +19,16 @@ import {IPropaneInvestorBlacklistHead} from "../compliance/heads/IPropaneInvesto
 /// @notice Service locator. Services hold a reference to this contract only and resolve each other by
 ///         identifier at call time, so a compliance posture is changed by replacing one entry.
 contract PropaneInstitutional is Initializable, UUPSUpgradeable, PropaneInstitutionalBase, PropaneInstitutionalStorage {
+    error PropaneZeroMaintainer();
+    error PropaneNotEnoughPermissions();
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
 
     function initialize(address maintainer) external initializer {
-        require(maintainer != address(0), "Zero maintainer");
+        require(maintainer != address(0), PropaneZeroMaintainer());
         _institutional().services[PropaneServices.SVC_ROLES] = maintainer;
         emit PropaneInstitutionServiceSet(PropaneServices.SVC_ROLES, maintainer);
     }
@@ -39,10 +42,10 @@ contract PropaneInstitutional is Initializable, UUPSUpgradeable, PropaneInstitut
     function setInstitutionalService(uint256 serviceId, address serviceAddress) external {
         uint8 r = _roleOf(msg.sender);
         if (serviceId == PropaneServices.SVC_ROLES) {
-            require(r == PropaneRoles.ROLE_SUPER_OWNER, "Not enough permissions");
-            require(serviceAddress != address(0), "Zero maintainer");
+            require(r == PropaneRoles.ROLE_SUPER_OWNER, PropaneNotEnoughPermissions());
+            require(serviceAddress != address(0), PropaneZeroMaintainer());
         } else {
-            require(r == PropaneRoles.ROLE_SUPER_OWNER || r == PropaneRoles.ROLE_PROPANE, "Not enough permissions");
+            require(r == PropaneRoles.ROLE_SUPER_OWNER || r == PropaneRoles.ROLE_PROPANE, PropaneNotEnoughPermissions());
         }
         _institutional().services[serviceId] = serviceAddress;
         emit PropaneInstitutionServiceSet(serviceId, serviceAddress);
@@ -69,6 +72,6 @@ contract PropaneInstitutional is Initializable, UUPSUpgradeable, PropaneInstitut
     }
 
     function _authorizeUpgrade(address) internal view override {
-        require(_roleOf(msg.sender) == PropaneRoles.ROLE_SUPER_OWNER, "Not enough permissions");
+        require(_roleOf(msg.sender) == PropaneRoles.ROLE_SUPER_OWNER, PropaneNotEnoughPermissions());
     }
 }

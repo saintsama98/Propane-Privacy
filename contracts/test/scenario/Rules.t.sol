@@ -31,7 +31,7 @@ contract RulesTest is PropaneFixture {
         cfg.limits.totalInvestorsLimit = 1;
         vm.prank(issuer);
         engine.scheduleConfig(cfg);
-        vm.expectRevert("Not ready");
+        vm.expectRevert(PropaneComplianceEngine.PropaneConfigNotReady.selector);
         engine.applyConfig();
         assertEq(engine.config().limits.totalInvestorsLimit, 0);
     }

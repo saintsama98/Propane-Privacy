@@ -16,6 +16,8 @@ import {PropaneRoles, PropaneServices} from "./PropaneConstants.sol";
 ///         resolves every other service at call time, so any service can be replaced without
 ///         touching the others (the prior art's service-locator pattern).
 abstract contract PropaneServiceConsumer is Initializable, UUPSUpgradeable {
+    error PropaneZeroLocator();
+
     /// @custom:storage-location erc7201:propane.storage.ServiceConsumer
     struct ServiceConsumerStorage {
         address locator;
@@ -45,7 +47,7 @@ abstract contract PropaneServiceConsumer is Initializable, UUPSUpgradeable {
     /// @dev Also binds the FHE coprocessor for the current chain. The binding lives in the proxy's
     ///      storage, which is why it is done here and not in a constructor.
     function __PropaneServiceConsumer_init(address locator_) internal onlyInitializing {
-        require(locator_ != address(0), "Zero locator");
+        require(locator_ != address(0), PropaneZeroLocator());
         _consumer().locator = locator_;
         FHE.setCoprocessor(ZamaConfig.getEthereumCoprocessorConfig());
         emit PropaneLocatorSet(locator_);
