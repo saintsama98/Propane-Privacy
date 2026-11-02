@@ -1,13 +1,13 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: role constants and the external surface of the maintainer.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
 import {PropaneRoles} from "../common/PropaneConstants.sol";
 
-/*roles maintaining all the propane substrate for all upgrades*/
 /// @title PropaneMaintainerBase
-/// @author Propane
-/// @notice initial owner layer for ensuring systematic updation and regulation of propane substrate / a constraint layer essential
+/// @notice Role constants and the external surface of the maintainer.
 abstract contract PropaneMaintainerBase {
     uint8 public constant NO_ROLE = PropaneRoles.ROLE_NONE;
     uint8 public constant SUPER_OWNER = PropaneRoles.ROLE_SUPER_OWNER;

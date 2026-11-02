@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: account-shape rule that blocks contract recipients unless they are platform wallets.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -8,9 +10,7 @@ import {PropaneServices} from "../../common/PropaneConstants.sol";
 import {IPropaneInvestorEOAHead} from "./IPropaneInvestorEOAHead.sol";
 import {IPropaneCompliance} from "../../interfaces/IPropaneServices.sol";
 
-/*investor EOA head | account-shape rule module for the compliance engine*/
 /// @title PropaneInvestorEOAHead
-/// @author Propane
 /// @notice Blocks a recipient that has code unless it is a platform wallet. Account shape is public
 ///         chain state, so the verdict is computed in the clear and lifted to an encrypted flag
 ///         only so that it combines with the encrypted ladder.

@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: role, service, region and reason code constants used across the system.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 

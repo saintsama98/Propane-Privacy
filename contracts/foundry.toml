@@ -5,59 +5,38 @@ test = "test"
 script = "script"
 libs = ["dependencies"]
 
-# --- Pin everything. Nothing here may be left to defaults. ---
-# Target: Ethereum mainnet. Mainnet is on Fusaka (Dec 2025), so cancun is
-# deploy-safe by construction. cancun is also solc 0.8.28's own default and is
-# the newest level whose opcodes this codebase actually uses (TSTORE/TLOAD for
-# reentrancy guards, MCOPY). prague/osaka add nothing at the codegen level here.
-# NOTE: forge silently downgrades an evm_version the pinned solc cannot support
-# (osaka -> prague, no warning). Verify with `forge build --build-info`.
 solc_version = "0.8.28"
+# forge silently downgrades an evm_version that solc cannot support
 evm_version = "cancun"
 optimizer = true
-# Splitting the rules into separate modules keeps every contract far below EIP-170, so the
-# size/runtime trade can be spent on runtime gas instead of bytecode. The rule
-# ladder runs on every transfer and this deploys to mainnet, so runtime gas is
-# the scarce resource. `forge build --sizes` in CI is the guard.
+# runtime gas matters most: the rule ladder runs on every transfer
 optimizer_runs = 10000
 via_ir = false
 
-# Remappings are declared explicitly, never guessed. Soldeer writes generated
-# paths and auto-detection disagrees with them; the resulting errors are hard
-# to read. Matches the OriginProtocol/origin-dollar configuration.
+# remappings are written out below, never guessed
 auto_detect_remappings = false
 
-# Declared explicitly rather than relying on Soldeer's version-suffixed generated
-# paths, which do not match the "@openzeppelin/contracts/..." prefix the
-# upgradeable library uses for its own imports. Prefixes taken from upstream:
-# dependencies/@openzeppelin-contracts-upgradeable-5.7.0/remappings.txt
 remappings = [
     "forge-std/=dependencies/forge-std-1.16.2/src/",
     "@openzeppelin/contracts/=dependencies/@openzeppelin-contracts-5.7.0/contracts/",
     "@openzeppelin/contracts-upgradeable/=dependencies/@openzeppelin-contracts-upgradeable-5.7.0/contracts/",
-    # FHE stack. Zama's Solidity library and encrypted types, plus forge-fhevm, which deploys the
-    # real fhEVM host contracts inside forge tests with mock signers. forge-fhevm is test-only.
     "@fhevm/solidity/=dependencies/@fhevm-solidity-0.11.1/",
     "encrypted-types/=dependencies/@encrypted-types-0.0.4/",
     "forge-fhevm/=dependencies/forge-fhevm-3ee696f/src/",
     "@fhevm/host-contracts/=dependencies/forge-fhevm-3ee696f/src/fhevm-host/",
 ]
 
-# Emit each contract's storage layout with the build artifacts, so layouts can be inspected.
+# keep storage layouts with the build artifacts
 extra_output_files = ["storageLayout"]
 
 bytecode_hash = "none"
 cbor_metadata = false
 
-# The compliance engine inlines the FHE library heavily and exceeds EIP-170 at 10000 runs. It is
-# compiled with a size-oriented profile; its runtime cost is dominated by FHE operations, which the
-# optimizer does not affect. Every other contract keeps the default profile.
+# the engine inlines the FHE library and exceeds EIP-170 at 10000 runs
 additional_compiler_profiles = [{ name = "size", optimizer_runs = 200 }]
 compilation_restrictions = [{ paths = "src/compliance/engine/PropaneComplianceEngine.sol", optimizer_runs = 200 }]
 
-# fhEVM tracks per-transaction HCU and transient ACL grants in transient storage. Without isolation a
-# whole test function runs as one transaction, which both overstates HCU and hides missing persistent
-# grants (it masked a real total-supply ACL bug). Every top-level call is its own transaction.
+# each top-level call is its own transaction, as fhEVM HCU and transient grants require
 isolate = true
 
 [profile.ci]
@@ -70,12 +49,9 @@ bracket_spacing = false
 int_types = "long"
 
 [soldeer]
-# Dependencies are vendored into dependencies/ and gitignored; foundry.toml and
-# soldeer.lock are the committed source of truth.
+# dependencies are gitignored; foundry.toml and soldeer.lock are the source of truth
 recursive_deps = false
-# Soldeer otherwise rewrites remappings.txt on every install with
-# version-suffixed paths, duplicating the explicit list above. One source of
-# truth: the `remappings` key in [profile.default].
+# the remappings key above stays the only list
 remappings_generate = false
 
 [dependencies]

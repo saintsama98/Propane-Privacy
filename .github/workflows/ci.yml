@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: contracts
+
+jobs:
+  check:
+    name: build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: install foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
+
+      - name: versions
+        run: forge --version
+
+      - name: restore dependencies
+        run: forge soldeer install --config-location foundry
+
+      - name: format check
+        run: forge fmt --check
+
+      - name: build
+        run: forge build --sizes
+
+      - name: test
+        run: forge test -vvv
+
+      - name: constant shadowing check
+        run: |
+          dupes=$(grep -rhoE '\b(constant|immutable)\s+[A-Z][A-Z0-9_]{2,}\b' src/ \
+            | grep -oE '[A-Z][A-Z0-9_]{2,}$' | sort | uniq -d)
+          if [ -n "$dupes" ]; then
+            echo "duplicate constant names across files:"; echo "$dupes"; exit 1
+          fi
+          echo "no duplicate constant names"

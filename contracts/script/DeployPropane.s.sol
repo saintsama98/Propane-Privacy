@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: deploys the system behind UUPS proxies on an fhEVM chain.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {Script, console2} from "forge-std/Script.sol";

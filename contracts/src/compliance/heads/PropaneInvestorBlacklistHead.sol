@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: encrypted deny list rule for senders and recipients.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -7,9 +9,7 @@ import {PropaneServiceConsumer} from "../../common/PropaneServiceConsumer.sol";
 import {PropaneRoles, PropaneServices} from "../../common/PropaneConstants.sol";
 import {IPropaneInvestorBlacklistHead} from "./IPropaneInvestorBlacklistHead.sol";
 
-/*investor blacklist head | denied-investor rule module for the compliance engine*/
 /// @title PropaneInvestorBlacklistHead
-/// @author Propane
 /// @notice Encrypted deny list. Blocks a listed sender as well as a listed recipient: a sanctions
 ///         listing overrides the property that an ineligible holder can still exit, by design.
 contract PropaneInvestorBlacklistHead is PropaneServiceConsumer, IPropaneInvestorBlacklistHead {

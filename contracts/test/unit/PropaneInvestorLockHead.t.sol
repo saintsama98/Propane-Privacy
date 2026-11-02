@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
 // Propane Privacy: unit tests for the issuance lock head.
 // @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "../scenario/PropaneFixture.sol";

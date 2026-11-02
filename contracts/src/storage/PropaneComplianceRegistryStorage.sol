@@ -1,12 +1,12 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: storage layout of the compliance registry.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
 import {PropaneAttributes} from "../interfaces/IPropaneServices.sol";
 
-/*compliance registry storage | registration flag and the encrypted attested attributes*/
 /// @title PropaneComplianceRegistryStorage
-/// @author Propane
 /// @notice Storage layer for the compliance registry. One wallet is one investor: an investor
 ///         holding several wallets is counted once per wallet, which is a known limitation.
 abstract contract PropaneComplianceRegistryStorage {

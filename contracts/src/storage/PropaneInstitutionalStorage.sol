@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: storage layout of the service locator.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 

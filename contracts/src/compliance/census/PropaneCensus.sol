@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: the confidential investor census, its upkeep and the investor-count caps.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -16,9 +18,7 @@ import {
 } from "../../interfaces/IPropaneServices.sol";
 import {IPropaneSecurityToken} from "../../security/IPropaneSecurityToken.sol";
 
-/*census head | the confidential investor census and its maintenance: investor-count caps and census upkeep*/
 /// @title PropaneCensus
-/// @author Propane
 /// @notice Holds the investor census as encrypted counters: total, accredited, US, US accredited,
 ///         JP, and EU retail per configured country slot. No counter is ever decrypted publicly
 ///         and only the engine and the record keeper may read them. Every move rewrites every

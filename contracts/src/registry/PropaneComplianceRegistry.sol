@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: wallet registration and the encrypted attributes every rule reads.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -9,9 +11,7 @@ import {PropaneServiceConsumer} from "../common/PropaneServiceConsumer.sol";
 import {PropaneRoles, PropaneServices} from "../common/PropaneConstants.sol";
 import {IPropaneCompliance, PropaneAttributes} from "../interfaces/IPropaneServices.sol";
 
-/*compliance registry | wallet registration and the encrypted attested record read by every rule*/
 /// @title PropaneComplianceRegistry
-/// @author Propane
 /// @notice Holds whether a wallet is registered (public) and its attested attributes (encrypted).
 ///         Every attribute change is reported to the compliance service before it takes effect,
 ///         because a change of region or accreditation moves a holder between census counters.
