@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MIT
 // Propane Privacy: interface of the time-bounded bar head.
 // @author adiii.eth
 

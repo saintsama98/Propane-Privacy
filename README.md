@@ -73,7 +73,7 @@ A role other than super owner can only grant or remove its own role.
 
 ## Build and test
 
-Foundry, solc 0.8.28, EVM `cancun`. Dependencies are installed with Soldeer.
+Foundry 1.7.1, solc 0.8.28, EVM `cancun`. Dependencies are installed with Soldeer.
 
 ```shell
 cd contracts
@@ -94,12 +94,24 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 | `test/measure/` | HCU per operation, and the worst case under the unmodified host limits |
 | `test/unit/`, `test/invariant/`, `test/formal/` | Role scoping (unit, stateful invariant, Halmos), storage namespace slots, an fhEVM smoke test |
 
+## Third-party code and licenses
+
+| Component | Use | License |
+|---|---|---|
+| [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) and Contracts Upgradeable | Soldeer dependencies. Proxies, upgrades, reentrancy guards. | MIT |
+| [@fhevm/solidity](https://github.com/zama-ai/fhevm) | Soldeer dependency. The FHE library. | BSD-3-Clause-Clear |
+| encrypted-types | Soldeer dependency. Encrypted value types. | MIT |
+| [forge-fhevm](https://github.com/zama-ai/forge-fhevm) | Soldeer dependency, tests only. Deploys the fhEVM host contracts in Foundry. | BSD-3-Clause-Clear |
+| [forge-std](https://github.com/foundry-rs/forge-std) | Soldeer dependency, tests only. | MIT or Apache-2.0 |
+
+BSD-3-Clause-Clear grants no patent rights. Production use of Zama's libraries needs a commercial patent license from Zama.
+
+The rule ladder, reason codes and role structure follow Securitize's [DS Protocol](https://github.com/securitize-io/dstoken), which is the prior art named in the code comments. They are reimplemented for encrypted state; no DS Protocol code is copied.
+
 ## Status
 
-**Research and development ongoing.** Nothing here is complete, audited or
-intended for production use. Interfaces, storage layouts and the contents of this
-repository are expected to change without notice.
+Research build. Not audited. Not deployed. Interfaces and storage layouts may change without notice.
 
 ## License
 
-BUSL-1.1. See [`LICENSE`](LICENSE).
+The core contracts are BUSL-1.1, see [`LICENSE`](LICENSE). The interfaces, meaning every `I`-prefixed file under `contracts/src/`, are MIT, see [`LICENSE-MIT`](LICENSE-MIT). Each file's SPDX header states which applies. Copyright 2026 adiii.eth.
