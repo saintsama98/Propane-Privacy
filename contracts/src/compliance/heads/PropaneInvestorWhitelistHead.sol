@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: offering admission rule for recipients.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -7,9 +9,7 @@ import {PropaneServiceConsumer} from "../../common/PropaneServiceConsumer.sol";
 import {PropaneRoles, PropaneServices} from "../../common/PropaneConstants.sol";
 import {IPropaneInvestorWhitelistHead} from "./IPropaneInvestorWhitelistHead.sol";
 
-/*investor whitelist head | admitted-investor rule module for the compliance engine*/
 /// @title PropaneInvestorWhitelistHead
-/// @author Propane
 /// @notice Offering-level admission on top of registry registration: a recipient must hold an
 ///         encrypted admission flag set by the issuer. Admission is not public.
 contract PropaneInvestorWhitelistHead is PropaneServiceConsumer, IPropaneInvestorWhitelistHead {

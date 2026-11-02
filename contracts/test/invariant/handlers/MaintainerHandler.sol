@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: handler that drives the maintainer in the invariant suite.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";

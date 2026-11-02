@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: base for upgradeable services, resolving peers through the locator and authority through the maintainer.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -9,9 +11,7 @@ import {ZamaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 import {IPropaneLocator, IPropaneRoles} from "../interfaces/IPropaneServices.sol";
 import {PropaneRoles, PropaneServices} from "./PropaneConstants.sol";
 
-/*service consumer | resolves peers through the institutional locator and authority through the maintainer*/
 /// @title PropaneServiceConsumer
-/// @author Propane
 /// @notice Base for every upgradeable Propane service. Holds one reference, to the locator, and
 ///         resolves every other service at call time, so any service can be replaced without
 ///         touching the others (the prior art's service-locator pattern).

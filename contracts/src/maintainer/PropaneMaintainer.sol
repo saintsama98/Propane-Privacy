@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: role management and the scope of each role.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -15,11 +17,6 @@ abstract contract PropaneMaintainer is Initializable, UUPSUpgradeable, PropaneMa
     error PropaneZeroAddress();
     error PropaneAlreadySuperOwner();
     error PropaneTargetHoldsRole();
-
-    /*roles maintaining all the propane substrate for all upgrades*/
-    // @title A title that should describe the contract/interface
-    /// @author Propane
-    /// @notice initial owner layer for ensuring systematic updation and regulation of propane substrate / a constraint layer essential
 
     /// @custom:storage-location erc7201:propane.storage.Maintainer
     struct MaintainerStorage {

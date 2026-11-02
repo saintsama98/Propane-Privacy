@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: every custom error outside the maintainer, raised through the deployed system.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";

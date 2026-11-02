@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: each optional head wired into the engine and exercised through transfers.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";

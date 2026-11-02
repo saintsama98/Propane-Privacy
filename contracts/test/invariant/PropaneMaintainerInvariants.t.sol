@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: stateful invariants over the role maintainer.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: smoke test that the fhEVM test stack works.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {FhevmTest} from "forge-fhevm/FhevmTest.sol";

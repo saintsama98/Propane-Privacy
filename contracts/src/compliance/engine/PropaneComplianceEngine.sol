@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: the compliance rule ladder evaluated over encrypted state.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -17,9 +19,7 @@ import {
 } from "../../interfaces/IPropaneServices.sol";
 import {IPropaneSecurityToken} from "../../security/IPropaneSecurityToken.sol";
 
-/*compliance engine | the prior-art rule ladder evaluated over encrypted state, with a confidential census*/
 /// @title PropaneComplianceEngine
-/// @author Propane
 /// @notice Evaluates every rule of the regulated ladder (eligibility, holding bounds, lock-ups and
 ///         investor-count caps) over
 ///         encrypted balances, amounts and attributes, and maintains the investor census as encrypted

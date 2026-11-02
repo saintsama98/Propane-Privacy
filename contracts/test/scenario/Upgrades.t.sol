@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: upgrade authority and replacement of the compliance service.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";

@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: shared types and the interfaces services use to reach each other.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 

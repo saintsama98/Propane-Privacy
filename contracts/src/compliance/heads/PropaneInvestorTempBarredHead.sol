@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: bars a sender until an encrypted timestamp.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -7,9 +9,7 @@ import {PropaneServiceConsumer} from "../../common/PropaneServiceConsumer.sol";
 import {PropaneRoles, PropaneServices} from "../../common/PropaneConstants.sol";
 import {IPropaneInvestorTempBarredHead} from "./IPropaneInvestorTempBarredHead.sol";
 
-/*investor temporary bar head | time-bounded restriction rule module for the compliance engine*/
 /// @title PropaneInvestorTempBarredHead
-/// @author Propane
 /// @notice Bars a sender until an encrypted timestamp. The bar time is encrypted so that the
 ///         existence and length of a bar are not public.
 contract PropaneInvestorTempBarredHead is PropaneServiceConsumer, IPropaneInvestorTempBarredHead {

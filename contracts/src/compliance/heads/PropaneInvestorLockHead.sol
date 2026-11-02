@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: issuance lock records and the hold-up rule.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -8,9 +10,7 @@ import {PropaneServices} from "../../common/PropaneConstants.sol";
 import {IPropaneCompliance} from "../../interfaces/IPropaneServices.sol";
 import {IPropaneInvestorLockHead} from "./IPropaneInvestorLockHead.sol";
 
-/*investor lock head | issuance lock records and the hold-up rule*/
 /// @title PropaneInvestorLockHead
-/// @author Propane
 /// @notice Records each issuance with its encrypted amount and public timestamp (issuance is a public
 ///         event), and answers whether a transfer would draw on tokens still inside their lock
 ///         period. The lock period depends on the sender's encrypted region, so each record

@@ -1,12 +1,12 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: service identifiers and the lookup surface of the locator.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
 import {PropaneServices} from "../common/PropaneConstants.sol";
 
 abstract contract PropaneInstitutionalBase {
-    //service named keys (minimal for now)
-
     uint256 public constant ROLE_SERVICE_PROVIDER = PropaneServices.SVC_ROLES;
     uint256 public constant REGISTRY_SERVICE_PROVIDER = PropaneServices.SVC_REGISTRY;
     uint256 public constant LOCK_HEAD = PropaneServices.SVC_LOCK_HEAD;

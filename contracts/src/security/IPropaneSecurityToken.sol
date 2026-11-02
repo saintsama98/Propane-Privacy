@@ -1,12 +1,12 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: interface of the confidential security token.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
 import {ebool, euint64, externalEuint64} from "encrypted-types/EncryptedTypes.sol";
 
-/*security token | confidential balances, no rules of its own*/
 /// @title IPropaneSecurityToken
-/// @author Propane
 /// @notice Confidential security token. Holds encrypted balances and delegates every decision to
 ///         the compliance service resolved at call time. Shaped after ERC-7943; deviations
 ///         forced by encrypted amounts are documented on the functions concerned.

@@ -1,13 +1,13 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: write surface of the compliance registry.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
 import {externalEbool, externalEuint8} from "encrypted-types/EncryptedTypes.sol";
 import {IPropaneRegistry} from "../interfaces/IPropaneServices.sol";
 
-/*compliance registry | wallet registration and the encrypted attested record read by every rule*/
 /// @title IPropaneComplianceRegistry
-/// @author Propane
 /// @notice Write surface of the registry. Attributes arrive as encrypted inputs from the transfer
 ///         agent; the registry never sees them in the clear and stores no personal data in any form.
 interface IPropaneComplianceRegistry is IPropaneRegistry {

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: disclosure properties checked against the ACL.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";

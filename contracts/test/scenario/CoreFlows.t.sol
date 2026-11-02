@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: issuance, transfer and exit flows through the whole system.
+// @author adiii.eth
+
 pragma solidity 0.8.28;
 
 import {PropaneFixture} from "./PropaneFixture.sol";

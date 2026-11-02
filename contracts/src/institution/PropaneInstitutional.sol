@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: the service locator every service resolves its peers through.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -13,9 +15,7 @@ import {IPropaneInvestorTempBarredHead} from "../compliance/heads/IPropaneInvest
 import {IPropaneInvestorWhitelistHead} from "../compliance/heads/IPropaneInvestorWhitelistHead.sol";
 import {IPropaneInvestorBlacklistHead} from "../compliance/heads/IPropaneInvestorBlacklistHead.sol";
 
-/*institutional locator | the one place every service resolves its peers*/
 /// @title PropaneInstitutional
-/// @author Propane
 /// @notice Service locator. Services hold a reference to this contract only and resolve each other by
 ///         identifier at call time, so a compliance posture is changed by replacing one entry.
 contract PropaneInstitutional is Initializable, UUPSUpgradeable, PropaneInstitutionalBase, PropaneInstitutionalStorage {

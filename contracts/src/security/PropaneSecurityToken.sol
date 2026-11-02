@@ -1,4 +1,6 @@
-//SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: BUSL-1.1
+// Propane Privacy: confidential balances, deferring every decision to the compliance engine.
+// @author adiii.eth
 
 pragma solidity 0.8.28;
 
@@ -8,9 +10,7 @@ import {PropaneRoles, PropaneServices} from "../common/PropaneConstants.sol";
 import {IPropaneCompliance, IPropaneRegistry} from "../interfaces/IPropaneServices.sol";
 import {IPropaneSecurityToken} from "./IPropaneSecurityToken.sol";
 
-/*security token | confidential balances, no rules of its own*/
 /// @title PropaneSecurityToken
-/// @author Propane
 /// @notice Holds encrypted balances and nothing else. Every movement is passed to the compliance
 ///         service, which returns the amount that may move: the requested amount or zero. A refused
 ///         transfer does not revert, so a failed compliance check is not published.
