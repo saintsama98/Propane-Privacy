@@ -104,9 +104,9 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 | [forge-fhevm](https://github.com/zama-ai/forge-fhevm) | Soldeer dependency, tests only. Deploys the fhEVM host contracts in Foundry. | BSD-3-Clause-Clear |
 | [forge-std](https://github.com/foundry-rs/forge-std) | Soldeer dependency, tests only. | MIT or Apache-2.0 |
 
-BSD-3-Clause-Clear grants no patent rights. Production use of Zama's libraries needs a commercial patent license from Zama.
+BSD-3-Clause-Clear grants no patent rights. Zama states that its libraries are free to use only for development, research, prototyping and experimentation, and that commercial use needs Zama's commercial patent license. This repository's license does not grant those rights.
 
-The rule ladder, reason codes and role structure follow Securitize's [DS Protocol](https://github.com/securitize-io/dstoken), which is the prior art named in the code comments. They are reimplemented for encrypted state; no DS Protocol code is copied.
+The rule ladder, reason codes and role structure follow Securitize's [DS Protocol](https://github.com/securitize-io/dstoken), which is the prior art named in the code comments. They are reimplemented for encrypted state; no DS Protocol code is copied. DS Protocol is Apache-2.0.
 
 ## Status
 
