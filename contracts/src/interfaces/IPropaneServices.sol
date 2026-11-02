@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MIT
 // Propane Privacy: shared types and the interfaces services use to reach each other.
 // @author adiii.eth
 
