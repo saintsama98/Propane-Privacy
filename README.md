@@ -14,7 +14,7 @@ The token holds balances and no rules. Every decision is delegated to a complian
 
 1. **The census rules run on encrypted counters.** Total, accredited, US, US accredited, JP and EU retail per country are kept as encrypted counters that are never decrypted publicly. Caps are evaluated jointly over both parties and the counters, including the slot that is freed when a sender leaves the same category in the same transfer, and the US cap expressed as a percentage of all investors.
 2. **The counters are exact.** A randomized test drives arbitrary sequences of transfers, self transfers, issuances, burns, forced transfers and attribute changes, and checks after every operation that each encrypted counter equals the count recomputed in the clear. The on-chain recomputation then reproduces the live census exactly.
-3. **It fits the host limits.** The worst case measured, a transfer under the full rulebook with four rule heads and two open lock records, costs 13.06M HCU against the per-transaction limit of 20M and stays within the 5M sequential depth limit.
+3. **It fits the host limits.** The most expensive transfer profiled, under the full rulebook with four rule heads and one open lock record, costs 13.06M HCU against the per-transaction limit of 20M. A separate test runs the same rulebook with two open lock records under the unmodified host limits, including the 5M sequential depth limit, and fails on any breach.
 
 ## Architecture
 
@@ -92,7 +92,7 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 | `test/scenario/CensusSequence.t.sol` | The census invariant under random sequences, and recomputation |
 | `test/scenario/Heads.t.sol`, `Upgrades.t.sol` | Rule heads; upgrade authority, state preservation, compliance swap |
 | `test/measure/` | HCU per operation, and the worst case under the unmodified host limits |
-| `test/unit/`, `test/invariant/`, `test/formal/` | Role scoping (unit, stateful invariant, Halmos), storage namespace slots, an fhEVM smoke test |
+| `test/unit/`, `test/invariant/`, `test/formal/` | Each rule head and registry path; role scoping (unit, stateful invariant, Halmos); storage namespace slots; an fhEVM smoke test |
 
 ## Third-party code and licenses
 
