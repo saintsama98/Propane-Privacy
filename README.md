@@ -52,7 +52,7 @@ Nothing in this path reverts on an encrypted condition. A refused transfer moves
 
 **The pre-check is not an oracle.** A view that anyone can call about anyone is a way to read investor attributes without transacting. `requestTransferCheck` answers only the investor, a venue the investor has delegated to, or the transfer agent. The venue receives the verdict; only the investor receives the reason.
 
-**The census repairs itself from chain state.** Counters are never overwritten by an administrator. `beginRecompute`, `continueRecompute` and `finishRecompute` rebuild them in batches from balances and attributes, so the result needs no trust in whoever triggers it.
+**The census repairs itself from chain state.** Counters are never overwritten by an administrator. `beginRecompute`, `continueRecompute` and `finishRecompute` rebuild them in batches from balances and attributes, so the result needs no trust in whoever triggers it. Transfers and attribute changes keep running during a recomputation: a move that touches a wallet already counted is applied to the rebuilt counters as well, so the result matches chain state when it is installed.
 
 **Configuration is public, and slow.** Caps, minimums and lock periods describe the offering, not any investor, so they are readable. A change takes effect after a one-day delay, so a cap cannot be lowered and observed within a single window to probe the census.
 
@@ -89,7 +89,7 @@ Tests run in isolate mode, one transaction per call, against the real fhEVM host
 | `test/scenario/CoreFlows.t.sol` | Issue, transfer, refusals, freeze, forced transfer, seizure, burn, attribute changes, sender exit |
 | `test/scenario/Rules.t.sol` | Each rule family, with the census exemptions exercised explicitly |
 | `test/scenario/Privacy.t.sol` | Who may decrypt which handle; pre-check scoping; engine, census and token guards |
-| `test/scenario/CensusSequence.t.sol` | The census invariant under random sequences, and recomputation |
+| `test/scenario/CensusSequence.t.sol` | The census invariant under random sequences, and recomputation with moves interleaved |
 | `test/scenario/Heads.t.sol`, `Upgrades.t.sol` | Rule heads; upgrade authority, state preservation, compliance swap |
 | `test/measure/` | HCU per operation, and the worst case under the unmodified host limits |
 | `test/unit/`, `test/invariant/`, `test/formal/` | Each rule head and registry path; role scoping (unit, stateful invariant, Halmos); storage namespace slots; an fhEVM smoke test |

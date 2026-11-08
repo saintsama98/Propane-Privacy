@@ -37,6 +37,9 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
         Counters shadow;
         uint256 recomputeCursor;
         bool recomputing;
+        // Recomputation round, and the round in which each wallet was last counted into the shadow.
+        uint64 recomputeRound;
+        mapping(address => uint64) countedInRound;
     }
 
     // erc7201("propane.storage.Census")
@@ -72,14 +75,28 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
 
     /// @notice Applies +1 to every category of `enterAttrs` when `enter` and -1 to every category of
     ///         `leaveAttrs` when `leave`. Callable by the compliance service only.
+    /// @dev While a recomputation is in progress, the part of the move that concerns a wallet already
+    ///      counted into the shadow is applied to the shadow too. A wallet not yet counted needs
+    ///      nothing: it is read from chain state when the cursor reaches it.
     function applyMove(
+        address leaver,
+        address enterer,
         PropaneAttributes calldata leaveAttrs,
         PropaneAttributes calldata enterAttrs,
         ebool leave,
         ebool enter
     ) external onlyService(PropaneServices.SVC_COMPLIANCE) {
-        _apply(_c().live, leaveAttrs, enterAttrs, leave, enter);
-        _persist(_c().live);
+        CensusStorage storage $ = _c();
+        _apply($.live, leaveAttrs, enterAttrs, leave, enter);
+        _persist($.live);
+        if ($.recomputing) {
+            bool leaverCounted = $.countedInRound[leaver] == $.recomputeRound;
+            bool entererCounted = $.countedInRound[enterer] == $.recomputeRound;
+            if (leaverCounted || entererCounted) {
+                ebool no = FHE.asEbool(false);
+                _apply($.shadow, leaveAttrs, enterAttrs, leaverCounted ? leave : no, entererCounted ? enter : no);
+            }
+        }
     }
 
     /// @notice Investor-count cap rules. Each cap is checked only for a recipient that would become a new holder,
@@ -175,6 +192,7 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
         CensusStorage storage $ = _c();
         _zero($.shadow);
         $.recomputeCursor = 0;
+        $.recomputeRound++;
         $.recomputing = true;
         emit PropaneCensusRecomputeStarted();
     }
@@ -191,6 +209,7 @@ contract PropaneCensus is PropaneServiceConsumer, IPropaneCensus {
         if (end > n) end = n;
         for (uint256 i = $.recomputeCursor; i < end; i++) {
             address w = reg.walletAt(i);
+            $.countedInRound[w] = $.recomputeRound;
             if (compliance.isPlatformWallet(w)) continue;
             euint64 bal = token.confidentialBalanceOf(w);
             if (!FHE.isInitialized(bal)) continue;
