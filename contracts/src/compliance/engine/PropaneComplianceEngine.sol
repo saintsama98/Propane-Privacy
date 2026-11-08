@@ -240,7 +240,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
 
         if (!toPlatform) {
             ebool enter = FHE.and(toNew, FHE.ne(effective, uint64(0)));
-            _move(ta, ta, FHE.asEbool(false), enter);
+            _move(to, to, ta, ta, FHE.asEbool(false), enter);
         }
         address lockHead = _serviceOrZero(PropaneServices.SVC_LOCK_HEAD);
         if (lockHead != address(0)) {
@@ -259,7 +259,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
         if (!_s().platform[from]) {
             PropaneAttributes memory fa = _attrs(from);
             ebool leave = FHE.and(FHE.eq(balance, effective), FHE.ne(effective, uint64(0)));
-            _move(fa, fa, leave, FHE.asEbool(false));
+            _move(from, from, fa, fa, leave, FHE.asEbool(false));
         }
         FHE.allowTransient(effective, msg.sender);
     }
@@ -276,7 +276,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
         ebool nz = FHE.ne(effective, uint64(0));
         ebool leave = $.platform[from] ? FHE.asEbool(false) : FHE.and(FHE.eq(balance, effective), nz);
         ebool enter = $.platform[to] ? FHE.asEbool(false) : FHE.and(FHE.eq(_bal(to), uint64(0)), nz);
-        _move(_attrs(from), _attrs(to), leave, enter);
+        _move(from, to, _attrs(from), _attrs(to), leave, enter);
         FHE.allowTransient(effective, msg.sender);
     }
 
@@ -291,7 +291,7 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
         // A wallet that has never held has an uninitialised balance handle: public, and a no-op.
         if (!FHE.isInitialized(bal)) return;
         ebool holder = FHE.ne(bal, uint64(0));
-        _move(_initAttrs(previous), _initAttrs(next), holder, holder);
+        _move(wallet, wallet, _initAttrs(previous), _initAttrs(next), holder, holder);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -609,26 +609,31 @@ contract PropaneComplianceEngine is PropaneServiceConsumer, IPropaneCompliance {
         // would count the holder as leaving and let any holder deflate the census at will.
         if (c.from == c.to) {
             ebool no = FHE.asEbool(false);
-            _move(c.fa, c.ta, no, no);
+            _move(c.from, c.to, c.fa, c.ta, no, no);
             return;
         }
         ebool nz = FHE.ne(effective, uint64(0));
         ebool leave = c.fromPlatform ? FHE.asEbool(false) : FHE.and(FHE.eq(c.fromBal, effective), nz);
         ebool enter = c.toPlatform ? FHE.asEbool(false) : FHE.and(c.toNew, nz);
-        _move(c.fa, c.ta, leave, enter);
+        _move(c.from, c.to, c.fa, c.ta, leave, enter);
     }
 
     /// @dev Hands a move to the census service. Every handle is granted transiently; the census
     ///      rewrites every counter whether or not either flag is set.
-    function _move(PropaneAttributes memory leaveAttrs, PropaneAttributes memory enterAttrs, ebool leave, ebool enter)
-        private
-    {
+    function _move(
+        address leaver,
+        address enterer,
+        PropaneAttributes memory leaveAttrs,
+        PropaneAttributes memory enterAttrs,
+        ebool leave,
+        ebool enter
+    ) private {
         address census = _service(PropaneServices.SVC_CENSUS);
         _lend(leaveAttrs, census);
         _lend(enterAttrs, census);
         FHE.allowTransient(leave, census);
         FHE.allowTransient(enter, census);
-        IPropaneCensus(census).applyMove(leaveAttrs, enterAttrs, leave, enter);
+        IPropaneCensus(census).applyMove(leaver, enterer, leaveAttrs, enterAttrs, leave, enter);
     }
 
     function _lend(PropaneAttributes memory a, address to) private {

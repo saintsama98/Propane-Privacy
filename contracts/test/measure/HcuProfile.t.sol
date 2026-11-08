@@ -153,6 +153,11 @@ contract HcuProfileTest is PropaneFixture {
         _nextBlock();
         census.continueRecompute(1);
         _report("recompute.perWallet", _used());
+
+        // Both parties already counted: the move is applied to the live and the shadow counters.
+        _nextBlock();
+        census.continueRecompute(2);
+        _measureTransfer("transfer.full-rulebook+4heads+recomputing");
     }
 
     function _wireHeads() internal {

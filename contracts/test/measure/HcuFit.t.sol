@@ -84,6 +84,8 @@ contract HcuFitTest is PropaneFixture {
         census.beginRecompute();
         _nextBlock();
         census.continueRecompute(4); // four wallets per transaction
+        // Both parties already counted, so the move is applied to the shadow as well.
+        assertEq(_transfer(a, b, 10), 10, "full ladder while a recompute follows both wallets");
         _nextBlock();
         vm.prank(ta);
         census.finishRecompute();

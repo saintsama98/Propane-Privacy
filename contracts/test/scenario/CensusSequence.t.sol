@@ -100,6 +100,92 @@ contract CensusSequenceTest is PropaneFixture {
         census.finishRecompute();
     }
 
+    /// @dev A holder that enters after its registry slot was processed must still be counted.
+    function test_recompute_countsEntryAfterCursorPassed() public {
+        _beginRecompute();
+        _continueAll();
+        _issue(w[1], 10); // w1 becomes a holder after the cursor passed it
+        _finishRecompute();
+        _assertCensus();
+    }
+
+    /// @dev A holder that exits after its registry slot was processed must not stay counted.
+    function test_recompute_dropsExitAfterCursorPassed() public {
+        _beginRecompute();
+        _continueAll();
+        _burn(w[0], 50);
+        _finishRecompute();
+        _assertCensus();
+    }
+
+    /// @dev An attribute change of a processed holder must move it between categories in the result.
+    function test_recompute_followsAttributeChangeAfterCursorPassed() public {
+        _beginRecompute();
+        _continueAll();
+        _update(w[0], JP, 0, false, false);
+        _finishRecompute();
+        _assertCensus();
+    }
+
+    /// @dev A move between a processed and an unprocessed wallet is counted once, not twice.
+    function test_recompute_countsSplitMoveOnce() public {
+        _beginRecompute();
+        _nextBlock();
+        census.continueRecompute(1); // w0 processed, w1.. not yet
+        _transfer(w[0], w[1], 50); // w0 leaves (processed), w1 enters (unprocessed)
+        _continueAll();
+        _finishRecompute();
+        _assertCensus();
+    }
+
+    /// forge-config: default.fuzz.runs = 8
+    function testFuzz_recomputeWithInterleavedMoves(uint256 seed) public {
+        _beginRecompute();
+        for (uint256 b = 0; b < known.length; b++) {
+            seed = uint256(keccak256(abi.encode(seed, b)));
+            _nextBlock();
+            census.continueRecompute(1);
+            _randomOp(seed);
+            _assertCensus();
+        }
+        _finishRecompute();
+        _assertCensus();
+    }
+
+    function _randomOp(uint256 seed) internal {
+        uint256 op = seed % 6;
+        address x = w[(seed >> 8) % 6];
+        address y = w[(seed >> 16) % 6];
+        uint64 amt = uint64((seed >> 24) % 60);
+        if (op <= 2) {
+            _transfer(x, y, amt);
+        } else if (op == 3) {
+            _issue(x, amt);
+        } else if (op == 4) {
+            _burn(x, amt);
+        } else {
+            uint8[4] memory r = [US, EU, JP, OTHER];
+            _update(x, r[(seed >> 32) % 4], uint8((seed >> 40) % 2), (seed >> 48) % 2 == 0, (seed >> 56) % 2 == 0);
+        }
+    }
+
+    function _beginRecompute() internal {
+        _nextBlock();
+        vm.prank(ta);
+        census.beginRecompute();
+    }
+
+    function _continueAll() internal {
+        _nextBlock();
+        census.continueRecompute(type(uint256).max / 2);
+    }
+
+    function _finishRecompute() internal {
+        _nextBlock();
+        vm.prank(ta);
+        census.finishRecompute();
+    }
+
     function test_recomputeRequiresCompletion() public {
         vm.prank(ta);
         census.beginRecompute();

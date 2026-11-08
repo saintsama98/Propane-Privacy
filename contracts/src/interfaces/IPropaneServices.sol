@@ -116,7 +116,11 @@ interface IPropaneCensus {
     ///         each true when the corresponding group fails: regional caps (JP, EU retail, US, US
     ///         accredited), global caps (non-accredited, total), and the minimum-investor rule.
     function capChecks(PropaneCapInput calldata input) external returns (ebool regional, ebool global, ebool tooFew);
+    /// @notice Applies one holder move. `leaver` and `enterer` are the wallets behind `leave` and
+    ///         `enter`, so that a recomputation in progress can follow wallets it has already counted.
     function applyMove(
+        address leaver,
+        address enterer,
         PropaneAttributes calldata leaveAttrs,
         PropaneAttributes calldata enterAttrs,
         ebool leave,
